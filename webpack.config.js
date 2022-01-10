@@ -1,31 +1,14 @@
 'use strict'
 
-const webpack = require('webpack')
 const path = require('path')
 const buildPath = path.join(__dirname, './dist')
-const args = require('yargs').argv
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const postcssPresetEnv = require('postcss-preset-env')
 const cssnano = require('cssnano')
 
-const isProd = args.prod
-const isDev = args.dev
-const env = args.envFile
-if (env) {
-  // Load env file
-  require('dotenv').config({ path: env })
-}
-
 const main = ['./src/site.js']
-const common = ['./src/common.js']
-let devtool
-
-if (isDev) {
-  main.push('webpack-dev-server/client?http://0.0.0.0:8080')
-  devtool = 'source-map'
-}
 
 const plugins = [
   new MiniCssExtractPlugin({ filename: '[name].[hash].css' }),
@@ -34,28 +17,11 @@ const plugins = [
     chunks: ['main'],
     inject: 'body',
   }),
-  new HtmlWebpackPlugin({
-    template: './src/error.html',
-    chunks: ['common'],
-    inject: 'body',
-    filename: 'error.html',
-  }),
-  new webpack.DefinePlugin({
-    'process.env.CLIENT_ID': JSON.stringify(process.env.CLIENT_ID),
-    'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
-    'process.env.ENABLE_GOOGLE_AUTH': JSON.stringify(process.env.ENABLE_GOOGLE_AUTH),
-    'process.env.GTM_ID': JSON.stringify(process.env.GTM_ID),
-  }),
 ]
-
-if (isProd) {
-  plugins.push(new webpack.NoEmitOnErrorsPlugin())
-}
 
 module.exports = {
   entry: {
     main: main,
-    common: common,
   },
 
   output: {
@@ -121,11 +87,9 @@ module.exports = {
 
   plugins: plugins,
 
-  devtool: devtool,
-
   devServer: {
     contentBase: buildPath,
     host: '0.0.0.0',
-    port: 8080,
+    port: 3000,
   },
 }

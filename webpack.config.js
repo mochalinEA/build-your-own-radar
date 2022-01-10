@@ -57,12 +57,6 @@ module.exports = {
     main: main,
     common: common,
   },
-  node: {
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty',
-    child_process: 'empty',
-  },
 
   output: {
     path: buildPath,

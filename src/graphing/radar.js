@@ -556,6 +556,11 @@ const Radar = function (size, radar) {
     buttonsGroup
       .append('div')
       .classed('print-radar-btn', true)
+      .append('a')
+      .attr('href', `${window.origin}`)
+      .text('Back to main')
+
+    buttonsGroup
       .append('div')
       .classed('print-radar button no-capitalize', true)
       .text('Print this radar')

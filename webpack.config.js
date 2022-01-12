@@ -1,5 +1,4 @@
 'use strict'
-
 const path = require('path')
 const buildPath = path.join(__dirname, './dist')
 
@@ -8,7 +7,16 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const postcssPresetEnv = require('postcss-preset-env')
 const cssnano = require('cssnano')
 
-const main = ['./src/site.js']
+const projects = require('./src/data/projects')
+
+const pagesPlugins = projects.map((projectName) => {
+  return new HtmlWebpackPlugin({
+    template: './src/project.html',
+    chunks: ['main'],
+    inject: 'body',
+    filename: `${projectName}/index.html`
+  })
+})
 
 const plugins = [
   new MiniCssExtractPlugin({ filename: '[name].[hash].css' }),
@@ -17,11 +25,12 @@ const plugins = [
     chunks: ['main'],
     inject: 'body',
   }),
+  ...pagesPlugins
 ]
 
 module.exports = {
   entry: {
-    main: main,
+    main: ['./src/site.js'],
   },
 
   output: {
@@ -67,6 +76,10 @@ module.exports = {
         loader: 'file-loader?name=images/[name].[ext]',
       },
       {
+        test: /\.(csv)$/,
+        loader: 'file-loader?name=data/[name].[ext]',
+      },
+      {
         test: /\.(png|jpg|ico)$/,
         exclude: /node_modules/,
         use: [
@@ -88,8 +101,8 @@ module.exports = {
   plugins: plugins,
 
   devServer: {
+    open: true,
     contentBase: buildPath,
-    host: '0.0.0.0',
     port: 3000,
   },
 }

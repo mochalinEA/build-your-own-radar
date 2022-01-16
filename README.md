@@ -19,4 +19,3 @@ https://github.com/thoughtworks/build-your-own-radar
 
 ## How add new radar?
 1. Add new file like backend.csv to ./src/data/backend.csv
-2. add 'backend' to projects array in ./src/data/project.js

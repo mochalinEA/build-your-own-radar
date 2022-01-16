@@ -23,7 +23,7 @@ const Sheet = require('./sheet')
 const ExceptionMessages = require('./exceptionMessages')
 const GoogleAuth = require('./googleAuth')
 
-const projects = require('../data/projects')
+const projects = process.env.proj || []
 
 projects.forEach((projectName) => {
   require(`../data/${projectName}.csv`)
@@ -200,7 +200,7 @@ const plotProjectPage = function (projectName) {
     .build()
 }
 
-const plotMainPage = function () {
+const plotMainPage = function (projects) {
   GraphingMain(projects)
     .init()
     .plot()
@@ -215,7 +215,7 @@ const GoogleSheetInput = function () {
     if (projects.includes(projectName)) {
       plotProjectPage(projectName)
     } else {
-      plotMainPage()
+      plotMainPage(projects)
     }
   }
 

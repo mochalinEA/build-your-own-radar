@@ -6,8 +6,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const postcssPresetEnv = require('postcss-preset-env')
 const cssnano = require('cssnano')
+const webpack = require('webpack')
 
-const projects = require('./src/data/projects')
+const getProjectNames = require('./src/util/getProjectNames.js')
+
+const projects = getProjectNames('./src/data')
 
 const pagesPlugins = projects.map((projectName) => {
   return new HtmlWebpackPlugin({
@@ -19,6 +22,7 @@ const pagesPlugins = projects.map((projectName) => {
 })
 
 const plugins = [
+  new webpack.DefinePlugin({'process.env.proj': JSON.stringify(projects)}),
   new MiniCssExtractPlugin({ filename: '[name].[hash].css' }),
   new HtmlWebpackPlugin({
     template: './src/index.html',
